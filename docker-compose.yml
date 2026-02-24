@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    restart: always
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    image: atulsharmagpj/mean-backend:latest
+    container_name: backend
+    restart: always
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/meancrud
+    depends_on:
+      - mongo
+
+  frontend:
+    image: atulsharmagpj/mean-frontend:latest
+    container_name: frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:
